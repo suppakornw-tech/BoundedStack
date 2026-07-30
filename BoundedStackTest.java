@@ -127,7 +127,24 @@ public class BoundedStackTest {
     }
 
     private static void testProducer() {
-     
+        BoundedStack original = new BoundedStack(10);
+        
+        original.push("apple");
+        original.push("pen");
+        original.push("rock");
+        original.push("banana");
+
+        int before = original.size();
+
+        BoundedStack shuffled = original.reverse();
+
+        check("new shuffled -> size return will be 4",shuffled.size() == 4);
+        check("new shuffled -> peek -> will return apple",shuffled.peek() == "apple");
+        check("new shuffled -> size -> will return 4 same as original",shuffled.size() == before);
+
+        BoundedStack emptyReversed = new BoundedStack(10).reverse();
+        check("shuffling an empty playlist is safe", emptyReversed.size() == 0);
+
         System.out.println();
     }
 
@@ -141,7 +158,7 @@ public class BoundedStackTest {
         testPush();
         testPop();
         testObervers();
-        // testProducer();
+        testProducer();
         // testExposure();
 
         summary();
