@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class BoundedStackTest {
     private static int passed  = 0;
     private static int failed = 0;
@@ -21,7 +23,45 @@ public class BoundedStackTest {
     }
 
     private static void testCreators() {
-        BoundedStack bs1 = new BoundedStack();
+        // empty
+        BoundedStack empty = new BoundedStack();
+        check("new empty -> size will be 0", empty.size() == 0);
+
+        boolean throwNotHaveAnything = false;
+        try {
+            empty.peek();
+        } catch (Exception e) {
+            throwNotHaveAnything = true;
+        }
+        check("new empty -> do not have anything", throwNotHaveAnything);
+
+        // have something
+        BoundedStack something = new BoundedStack(Arrays.asList("something"));
+        check("new something -> size will be 1 ", something.size() == 1);
+        check("new something -> do have something ", something.peek() == "something");
+
+        // full
+        BoundedStack full = new BoundedStack(Arrays.asList("item", "item", "item", "item", "item", "item", "item", "item", "item", "item"));
+        check("new full -> size max to capacity", full.size() == full.capacity());
+
+
+        // null
+        boolean throwNull = false;
+        try {
+            new BoundedStack(null);
+        } catch (IllegalArgumentException e) {
+            throwNull = true;
+        }
+        check("new null -> throw IllegalArgumentException", throwNull);
+
+        // empty
+        boolean throwEmpty = false;
+        try {
+            new BoundedStack(Arrays.asList(""));
+        } catch (IllegalArgumentException e) {
+            throwEmpty = true;
+        }
+        check("new value empty -> throw IllegalArgumentException", throwEmpty);
 
         System.out.println();
     }

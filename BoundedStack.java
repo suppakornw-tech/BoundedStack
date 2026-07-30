@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
 
 public class BoundedStack {
@@ -18,8 +19,8 @@ public class BoundedStack {
 
     private void checkRep() {
         assert elements != null : "elements can not be null";
-        assert elements.size() > capacity : "elements is out of range";
-        assert top >= -1 && top < capacity : "top is out of range";
+        assert elements.size() <= capacity : "elements is out of range";
+        assert top >= -1 && top <= capacity : "top is out of range";
         
         for (String e : elements) {
             assert e != null : "value cannot be null";
@@ -29,6 +30,7 @@ public class BoundedStack {
 
     public BoundedStack() {
         this.elements = new ArrayList<>();
+        top = 0;
         checkRep();
     }
 
@@ -42,34 +44,50 @@ public class BoundedStack {
         }
 
         this.elements = new ArrayList<>(initial);
+        top = initial.size();
         checkRep();
     }
 
-    private boolean push() {
-        return true;   
+    public boolean push(String name) {
+        if (name == null || name == "") throw new IllegalArgumentException();
+        if (top == capacity) return false;
+
+        elements.add(name);
+        top++;
+        checkRep();
+        return true;
     }
 
-    private boolean pop() {
-        return true;   
+    public boolean pop(String name) {
+        if (top <= 0) return false;
+
+        elements.remove(top);
+        top--;
+        checkRep();
+        return true;
     }
 
-    private boolean peek() {
-        return true;   
+    public String peek() {
+        if (top <= 0) {
+            throw new IllegalArgumentException();
+        }
+
+        return elements.get(top - 1);
     }
 
-    private int size() {
+    public int size() {
         return top;
     }
 
-    private int capacity() {
+    public int capacity() {
         return capacity;
     }
 
-    private List<String> copy() {
+    public List<String> copy() {
         return new ArrayList<>(elements);
     }
 
-    private boolean reversed() {
+    public boolean reversed() {
         return true;
     }
 
