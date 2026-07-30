@@ -23,50 +23,53 @@ public class BoundedStackTest {
     }
 
     private static void testCreators() {
-        // empty
-        BoundedStack empty = new BoundedStack();
-        check("new empty -> size will be 0", empty.size() == 0);
-
-        boolean throwNotHaveAnything = false;
+        boolean throwNegativeCapacity = false;
         try {
-            empty.peek();
-        } catch (Exception e) {
-            throwNotHaveAnything = true;
-        }
-        check("new empty -> do not have anything", throwNotHaveAnything);
-
-        // have something
-        BoundedStack something = new BoundedStack(Arrays.asList("something"));
-        check("new something -> size will be 1 ", something.size() == 1);
-        check("new something -> do have something ", something.peek() == "something");
-
-        // full
-        BoundedStack full = new BoundedStack(Arrays.asList("item", "item", "item", "item", "item", "item", "item", "item", "item", "item"));
-        check("new full -> size max to capacity", full.size() == full.capacity());
-
-
-        // null
-        boolean throwNull = false;
-        try {
-            new BoundedStack(null);
+            new BoundedStack(-1);
         } catch (IllegalArgumentException e) {
-            throwNull = true;
+            throwNegativeCapacity = true;
         }
-        check("new null -> throw IllegalArgumentException", throwNull);
+        check("new bs1 -> capacity equal -1 -> throw IllegalArgumentException", throwNegativeCapacity);
 
-        // empty
-        boolean throwEmpty = false;
+
+        boolean throwZeroCapacity = false;
         try {
-            new BoundedStack(Arrays.asList(""));
+            new BoundedStack(-1);
         } catch (IllegalArgumentException e) {
-            throwEmpty = true;
+            throwZeroCapacity = true;
         }
-        check("new value empty -> throw IllegalArgumentException", throwEmpty);
+        check("new bs1 -> capacity equal 0 -> throw IllegalArgumentException", throwZeroCapacity);
+
+        BoundedStack bs1 = new BoundedStack(10);
+        check("new bs1 -> capacity equal 10 -> return true", bs1.capacity() == 10);
 
         System.out.println();
     }
 
     private static void testObervers() {
+        BoundedStack empty = new BoundedStack(10);
+        check("new empty -> size return will be 0", empty.size() == 0);
+
+        boolean threwpeek = false;
+        try {
+            empty.peek();
+        } catch (IllegalArgumentException e) {
+            threwpeek = true;
+        }
+        check("peek() ตอนข้อมูลว่าง -> throw IllegalStateException",threwpeek);
+
+        empty.push("apple");
+        empty.push("pen");
+
+        int before = empty.size();
+        empty.size();
+        empty.peek();
+        empty.copy();
+
+        check("new empty -> size return will be 2",empty.size() == 2);
+        check("new empty -> peek -> will return pen",empty.peek() == "pen");
+        check("observers have no side effects",empty.size() == before);
+
         System.out.println();
     }
 
@@ -80,9 +83,9 @@ public class BoundedStackTest {
     
     public static void main(String[] args) {
         testCreators();
-        // testObervers();
-        // testProducer();
-        // testMutotor();
+        testObervers();
+        testProducer();
+        testMutotor();
 
         summary();
     }
