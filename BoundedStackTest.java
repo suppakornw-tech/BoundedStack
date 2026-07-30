@@ -149,7 +149,23 @@ public class BoundedStackTest {
     }
 
     private static void testExposure() {
-     
+        BoundedStack manyApple = new BoundedStack(10);
+        manyApple.push("apple");
+        manyApple.push("apple");
+        manyApple.push("apple");
+        
+        List<String> got = manyApple.copy();
+        got.clear();
+        check("clearing result of manyApple() does not affect data", manyApple.size() == 3);
+
+        got = manyApple.copy();
+        got.add("injected");
+        check("adding to result of manyapple() does not affect data",
+                manyApple.size() == 3 && !(manyApple.peek() == "injected"));
+
+        check("boundedstack() returns a fresh list each call",
+                manyApple.copy() != manyApple.copy());
+
         System.out.println();
     }
     
@@ -159,7 +175,7 @@ public class BoundedStackTest {
         testPop();
         testObervers();
         testProducer();
-        // testExposure();
+        testExposure();
 
         summary();
     }
