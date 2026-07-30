@@ -18,8 +18,8 @@ public class BoundedStack {
     private void checkRep() {
         assert capacity > 0 : "capacity must be greater than 0";
         assert data != null : "data cannot be null";
-        assert top >= 0 && top < capacity : "top is out of range";
-        assert data.size() >= 0 && data.size() < capacity : "data is out of range";
+        assert top >= 0 && top <= capacity : "top is out of range";
+        assert data.size() >= 0 && data.size() <= capacity : "data is out of range";
     }
 
     public BoundedStack(int capacity) {
@@ -38,10 +38,10 @@ public class BoundedStack {
         data.add(name);
         top++;
         checkRep();
-    return true;
+        return true;
     }
 
-    public boolean pop(String name) {
+    public boolean pop() {
         if (top <= 0) return false;
 
         data.remove(top-1);
@@ -70,53 +70,11 @@ public class BoundedStack {
         return new ArrayList<>(data);
     }
 
-    public boolean reversed() {
+    public BoundedStack reverse() {
         BoundedStack reversed = new BoundedStack(capacity);
-
-        for (int i = capacity; i > 0; i--) {
-            System.out.println(data.get(i));
+        for (int i = size()-1 ; i >= 0; i--) {
+            reversed.push(data.get(i));
         }
-        return true;
+        return reversed;
     }
-
-
-
-
-
-    // public boolean add(String book) {
-    //     if (book == null) throw new IllegalArgumentException();
-    //     if (book == "" || book == " ") throw new IllegalArgumentException();
-    //     if (books.size() >= MAX_BOOK) return false;
-    //     if (books.contains(book)) return false;
-
-    //     books.add(book);
-    //     checkRep();
-    //     return true;
-    // }
-
-    // public boolean remove(String book) {
-    //     if (!books.contains(book)) return false;
-
-    //     books.remove(book);
-    //     checkRep();
-    //     return true;
-    // }
-
-    // public int size() {
-    //     return books.size();
-    // }
-
-    // public boolean contains(String book) {
-    //     return books.contains(book);
-    // }
-
-    // public BoundedStack shuffled() {
-    //     List<String> copy = new ArrayList<>(books);
-    //     Collections.shuffle(copy);
-    //     return new BoundedStack(copy);
-    // }
-
-    // public List<String> books() {
-    //     return new ArrayList<String>(books);
-    // }
 }
